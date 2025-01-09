@@ -1,7 +1,17 @@
 #!/bin/bash
 
 if [ "$#" -ne 1 ] || [ "$1" == "help" ]; then
-    echo "Usage: $0 help / init / leave / close / run"
+    echo "Usage: $0 <option>"
+    echo ""
+    echo "  help: Display this help message"
+    echo ""
+    echo "  init: Initialize the swarm"
+    echo ""
+    echo "  run: Build images and run the stack"
+    echo ""
+    echo "  close: Close the stack and remove all services"
+    echo ""
+    echo "  leave: Leave the swarm"
     exit 1
 fi
 

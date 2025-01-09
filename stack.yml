@@ -9,21 +9,33 @@ services:
     networks:
       - mqtt-net
     volumes:
-      - /home/rares/Documents/scd/tema3/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
       - mqtt-volume:/mosquitto
   iot_payload:
     image: iot_payload
     container_name: iot_payload
     networks:
       - mqtt-net
-  iot_reciever:
-    image: iot_reciever
-    container_name: iot_reciever
-    networks:
-      - mqtt-net
-
+  # iot_reciever:
+  #   image: iot_reciever
+  #   container_name: iot_reciever
+  #   networks:
+  #     - mqtt-net
+  #     - influx-vol
+  # influx:
+  #   image: influxdb:latest
+  #   container_name: influx
+  #   ports:
+  #     - "8086:8086"
+  #   networks:
+  #     - influx-vol
+  #   volumes:
+  #     - ./influxdb.conf:/etc/influxdb/influxdb.conf
+  #     - influx-volume:/var/lib/influxdb
 networks:
   mqtt-net:
+  # influx-vol:
 
 volumes:
   mqtt-volume:
+  # influx-volume:
