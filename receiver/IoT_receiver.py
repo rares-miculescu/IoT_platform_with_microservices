@@ -72,7 +72,7 @@ except KeyboardInterrupt:
 
 mqttc.loop_stop()
 mqttc.disconnect()
-# influx_client.close()
+influx_client.close()
 
 # print("Data written successfully.")
 # query = '''

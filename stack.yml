@@ -9,22 +9,29 @@ services:
     networks:
       - mqtt-net-payload
       - mqtt-net-receiver
+    restart: always
     volumes:
       - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
-      - mqtt-volume:/mosquitto
 
   iot_payload:
     image: iot_payload
     container_name: iot_payload
+    depends_on:
+      - mqtt
     networks:
       - mqtt-net-payload
+    restart: always
   
   iot_receiver:
     image: iot_receiver
+    depends_on:
+      - mqtt
+      - influx
     container_name: iot_receiver
     networks:
       - mqtt-net-receiver
       - influx-net
+    restart: always
   
   influx:
     image: influxdb:1.8
@@ -35,18 +42,34 @@ services:
       - "8086:8086"
     networks:
       - influx-net
+      - grafana-net
     volumes:
       - influx-volume:/var/lib/influxdb
     restart: always
-    # deploy:
-    #   placement:
-    #     constraints: [node.role == manager]
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    depends_on:
+      - influx
+    ports:
+      - "80:3000"
+    networks:
+      - grafana-net
+    volumes:
+      - grafana-volume:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    environment:
+      - "GF_SECURITY_ADMIN_USER=asistent"
+      - "GF_SECURITY_ADMIN_PASSWORD=grafanaSPRC2023"
+    restart: always
 
 networks:
   mqtt-net-receiver:
   mqtt-net-payload:
   influx-net:
+  grafana-net:
 
 volumes:
-  mqtt-volume:
   influx-volume:
+  grafana-volume:

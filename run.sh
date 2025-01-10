@@ -27,10 +27,12 @@ fi
 
 if [ "$1" == "close" ]; then
     docker stack ls --format "{{.Name}}" | xargs -n 1 docker stack rm 
+    ./run.sh leave
     exit 0
 fi
 
 if [ "$1" == "run" ]; then
+    ./run.sh init
     docker build -t iot_payload ./payload
     docker build -t iot_receiver ./receiver
     docker stack deploy -c stack.yml scd3
