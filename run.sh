@@ -26,13 +26,18 @@ if [ "$1" == "leave" ]; then
 fi
 
 if [ "$1" == "close" ]; then
-    docker stack ls --format "{{.Name}}" | xargs -n 1 docker stack rm
+    docker stack ls --format "{{.Name}}" | xargs -n 1 docker stack rm 
     exit 0
 fi
 
 if [ "$1" == "run" ]; then
     docker build -t iot_payload ./payload
-    docker build -t iot_reciever ./reciever
+    docker build -t iot_receiver ./receiver
     docker stack deploy -c stack.yml scd3
+    exit 0
+fi
+
+if [ "$1" == "volumes" ]; then
+    docker volume prune -f
     exit 0
 fi

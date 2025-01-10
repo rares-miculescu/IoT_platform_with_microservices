@@ -7,35 +7,46 @@ services:
     ports:
       - "1883:1883"
     networks:
-      - mqtt-net
+      - mqtt-net-payload
+      - mqtt-net-receiver
     volumes:
       - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
       - mqtt-volume:/mosquitto
+
   iot_payload:
     image: iot_payload
     container_name: iot_payload
     networks:
-      - mqtt-net
-  # iot_reciever:
-  #   image: iot_reciever
-  #   container_name: iot_reciever
-  #   networks:
-  #     - mqtt-net
-  #     - influx-vol
-  # influx:
-  #   image: influxdb:latest
-  #   container_name: influx
-  #   ports:
-  #     - "8086:8086"
-  #   networks:
-  #     - influx-vol
-  #   volumes:
-  #     - ./influxdb.conf:/etc/influxdb/influxdb.conf
-  #     - influx-volume:/var/lib/influxdb
+      - mqtt-net-payload
+  
+  iot_receiver:
+    image: iot_receiver
+    container_name: iot_receiver
+    networks:
+      - mqtt-net-receiver
+      - influx-net
+  
+  influx:
+    image: influxdb:1.8
+    container_name: influx
+    environment:
+      - INFLUXDB_DB=scd
+    ports:
+      - "8086:8086"
+    networks:
+      - influx-net
+    volumes:
+      - influx-volume:/var/lib/influxdb
+    restart: always
+    # deploy:
+    #   placement:
+    #     constraints: [node.role == manager]
+
 networks:
-  mqtt-net:
-  # influx-vol:
+  mqtt-net-receiver:
+  mqtt-net-payload:
+  influx-net:
 
 volumes:
   mqtt-volume:
-  # influx-volume:
+  influx-volume:
