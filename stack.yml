@@ -32,6 +32,8 @@ services:
       - mqtt-net-receiver
       - influx-net
     restart: always
+    environment:
+      - DEBUG_DATA_FLOW=false
   
   influx:
     image: influxdb:1.8
@@ -58,10 +60,9 @@ services:
       - grafana-net
     volumes:
       - grafana-volume:/var/lib/grafana
-      - ./grafana/provisioning:/etc/grafana/provisioning
     environment:
       - "GF_SECURITY_ADMIN_USER=asistent"
-      - "GF_SECURITY_ADMIN_PASSWORD=grafanaSPRC2023"
+      - "GF_SECURITY_ADMIN_PASSWORD=grafanaSPRC2024"
     restart: always
 
 networks:
