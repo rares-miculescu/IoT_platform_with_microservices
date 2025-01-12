@@ -18,7 +18,7 @@ logging.info(f"Enable logs: {enable_logs}")
 
 def on_connect(client, userdata, flags, reason_code, properties):
     """ connect and subscribe to all """
-    if enable_logs == "True":
+    if enable_logs == "true":
         logging.info(f"Connected with result code {reason_code}")
     client.subscribe("#")
 
@@ -49,11 +49,11 @@ def on_message(client, userdata, msg):
             point["timestamp"] = datetime.now()
 
         influx_client.write_points([point])
-        if enable_logs == "True":
+        if enable_logs == "true":
             logging.info(f"Data written: {point}")
 
     except Exception as e:
-        if enable_logs == "True":
+        if enable_logs == "true":
             logging.error(f"Error processing message: {e}")
 
 # init mqtt client

@@ -1,0 +1,19 @@
+datasources:
+  - name: InfluxDB
+    type: influxdb
+    access: proxy
+    orgId:
+    uid:
+    url: http://influx:8086
+    password:
+    user:
+    database: scd
+    basicAuth:
+    basicAuthUser:
+    basicAuthPassword:
+    withCredentials:
+    isDefault:
+    secureJsonData:
+      password: rares
+      basicAuthPassword: rares
+    version: 1

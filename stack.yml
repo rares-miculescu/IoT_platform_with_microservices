@@ -33,7 +33,7 @@ services:
       - influx-net
     restart: always
     environment:
-      - DEBUG_DATA_FLOW=false
+      - DEBUG_DATA_FLOW=true
   
   influx:
     image: influxdb:1.8
@@ -60,9 +60,10 @@ services:
       - grafana-net
     volumes:
       - grafana-volume:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
     environment:
       - "GF_SECURITY_ADMIN_USER=asistent"
-      - "GF_SECURITY_ADMIN_PASSWORD=grafanaSPRC2024"
+      - "GF_SECURITY_ADMIN_PASSWORD=grafanaSCD2024"
     restart: always
 
 networks:
