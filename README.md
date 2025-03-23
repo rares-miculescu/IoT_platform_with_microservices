@@ -1,24 +1,38 @@
-# Tema 3 SCD - Rares Dumitru Miculescu - 342C3
+# IoT platform with microservices
 
-## Introducere
+## Introduction
 
-Tema include generare de informatii de la diverse dispozitive, care random dau informatii catre MQTT. Din MQTT sunt luate de catre un parser, care le adauga in InfluxDB, ca la final sa fie afisate in Grafana.
+Platform that generates random IoT data, that is stored and viewed. The data is sent and recieved using MQTT protocol, stored inside InfluxDB database and viewed using Grafana.
 
-## Componente
+## Solution description
 
-mqtt : container-ul de mqtt, am folosit eclipse-mosquitto, a fost configurat pentru a folosi portul 1883 si a permite accesul anonim
+The solution is implemented using Docker Swarm, where there are 4 components:
 
-IoT_payload : acesta este un feeder de date facut extra de mine, pentru a se putea genera random datele ce trebuie trimise catre mqtt. Acesta ia un numar random de payload-uri care sa fie trimise random intr-un timestamp, cu locatia random, numarul de componente random (si implicit componentele random), si valorile din ele (care pot fi random ori string ori numar). De asemenea trimiterea timestamp-ului e alesa random.
+- Eclipse Mosquitto : MQTT container, listening on port 1883, with anonymous access
 
-IoT_receiver : script in python care primeste toate mesajele date de feeder prin mqtt, filtreaza datele care sunt numerice, verifica daca avem timestamp (daca nu, adauga timestamp now()), ca apoi sa trimita json-ul catre InfluxDB
+- IoT_payload : data feeder implemented to randomly generate data to be sent to MQTT. During a random timestamp, it generates a random number of payloads, with random fields and values. Instead of a numeric value, the program can also inject randomly a string.
 
-InfluxDB : baza de date unde se stocheaza informatia
+- IoT_receiver : recieves all data from mqtt, filters the numerical data, checks if a timestamp exists (if not, the current time is added) and sends the information to the database.
 
-Grafana : aplicatia de afisare a datelor
+- InfluxDB : database, where data is stored.
 
-run.sh : script cu care am rulat / oprit swarm-ul
+- Grafana : app that connects to the database to collect the data, to be shown in multiple ways.
 
-## Observatii
+## How to run
 
-Am fost nevoit sa introduc feeder-ul in swarm, pentru ca mi sa parut cea mai buna alternativa ca simulator. 
-Alte explicatii mai sunt drept comentarii in cod.
+Use run.sh. 
+
+To simply run this, use:
+```
+./run.sh run
+```
+
+To close it, run:
+```
+./run.sh close
+```
+
+For more informations:
+```
+./run.sh help
+```
